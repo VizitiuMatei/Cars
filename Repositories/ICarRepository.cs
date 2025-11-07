@@ -1,0 +1,13 @@
+﻿using CarsApi.Models;
+
+namespace CarsApi.Repositories
+{
+    public interface ICarRepository
+    {
+        Task<List<Car>> GetAllAsync(string? make = null, decimal? minWeight = null);
+        Task<Car?> GetByIdAsync(int id);
+        Task AddAsync(Car car);
+        Task UpdateAsync(Car car);
+        Task DeleteAsync(Car car);
+    }
+}
