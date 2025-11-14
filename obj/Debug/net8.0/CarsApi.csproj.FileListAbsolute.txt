@@ -138,3 +138,4 @@ C:\Proiecte\Cars\obj\Debug\net8.0\refint\CarsApi.dll
 C:\Proiecte\Cars\obj\Debug\net8.0\CarsApi.pdb
 C:\Proiecte\Cars\obj\Debug\net8.0\CarsApi.genruntimeconfig.cache
 C:\Proiecte\Cars\obj\Debug\net8.0\ref\CarsApi.dll
+C:\Proiecte\Cars\obj\Debug\net8.0\CarsApi.sourcelink.json
