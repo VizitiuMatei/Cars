@@ -28,39 +28,39 @@ namespace CarsApi.Controllers
             var luxuryCars = new List<Car>();
             var standardCars = new List<Car>();
             
-                if (car.Year < 2000)
-                {
-                    vintageCars.Add(car);
-                }
-                else if (car.FuelType?.ToLower() == "ELECTRIC")
-                {
-                    electricCars.Add(car);
-                }
-                else if (car.Make?.ToLower() == "AUDI" ||
-                         car.Make?.ToLower() == "BMW" ||
-                         car.Make?.ToLower() == "MERCEDES")
-                {
-                    luxuryCars.Add(car);
-                }
-                else
-                {
-                    standardCars.Add(car);
-                }
+            if (car.Year < 2000)
+            {
+                vintageCars.Add(car);
+            }
+            else if (car.FuelType?.ToLower() == "electric")
+            {
+                electricCars.Add(car);
+            }
+            else if (car.Make?.ToLower() == "audi" ||
+                     car.Make?.ToLower() == "bmw" ||
+                     car.Make?.ToLower() == "mercedes")
+            {
+                luxuryCars.Add(car);
+            }
+            else
+            {
+                standardCars.Add(car);
+            }
 
-                var pricingContext = new PricingContext(new VintagePricingStrategy());
+            var pricingContext = new PricingContext(new VintagePricingStrategy());
 
-                var response = new
-                {
-                    car.Id,
-                    car.Make,
-                    car.Model,
-                    car.Year,
-                    car.Weight,
-                    car.Unit,
-                    car.FuelType,
-                    price = pricingContext.CalculatePrice(car),
-                    strategy = pricingContext.GetStrategyName()
-                };
+            var response = new
+            {
+                car.Id,
+                car.Make,
+                car.Model,
+                car.Year,
+                car.Weight,
+                car.Unit,
+                car.FuelType,
+                price = pricingContext.CalculatePrice(car),
+                strategy = pricingContext.GetStrategyName()
+            };
 
             return Ok(response);
         }
