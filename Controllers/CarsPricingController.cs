@@ -32,13 +32,13 @@ namespace CarsApi.Controllers
                 {
                     vintageCars.Add(car);
                 }
-                else if (car.FuelType?.ToLower() == "electric")
+                else if (car.FuelType?.ToLower() == "ELECTRIC")
                 {
                     electricCars.Add(car);
                 }
-                else if (car.Make?.ToLower() == "audi" ||
-                         car.Make?.ToLower() == "bmw" ||
-                         car.Make?.ToLower() == "mercedes")
+                else if (car.Make?.ToLower() == "AUDI" ||
+                         car.Make?.ToLower() == "BMW" ||
+                         car.Make?.ToLower() == "MERCEDES")
                 {
                     luxuryCars.Add(car);
                 }
