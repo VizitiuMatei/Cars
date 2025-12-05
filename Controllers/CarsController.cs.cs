@@ -73,12 +73,22 @@ namespace CarsApi.Controllers
             try
             {
                 var cars = await _externalAdapter.GetCarsAsync();
-                return Ok(cars);
+                
+                var carsDto = cars.Select(car => new ExternalCarDto
+                {
+                    Manufacturer = car.Manufacturer,
+                    ModelName = car.ModelName,
+                    ProductionYear = car.ProductionYear,
+                    EngineType = car.EngineType
+                }).ToList();
+
+                return Ok(carsDto);
             }
             catch (Exception ex)
             {
                 return StatusCode(500, $"Failed to fetch external cars: {ex.Message}");
             }
+        }
         }
     }
 }
