@@ -32,7 +32,7 @@ builder.Services.AddScoped<ICarService, CarService>();
  
 builder.Services.AddHttpClient<IExternalCarApiAdapter, ExternalCarApiAdapter>(client =>
 {
-    client.BaseAddress = new Uri("https://api.carsdata.com"); 
+    client.BaseAddress = new Uri("https://api.carsdata.com/cars"); 
     client.Timeout = TimeSpan.FromSeconds(10);
 });
 

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using CarsApi.Pricing;
 using CarsApi.Data;
 using CarsApi.Models;
@@ -38,6 +39,33 @@ namespace CarsApi.Controllers
                 price = pricingContext.CalculatePrice(car),
                 strategy = pricingContext.GetStrategyName()
             };
+
+            return Ok(response);
+        }
+        [HttpGet("prices")]
+        public async Task<IActionResult> GetAllPrices()
+        {
+            var cars = await _context.Cars.ToListAsync();
+            var response = new List<object>();
+
+            foreach (var car in cars)
+            {
+                var strategy = PricingStrategyFactory.GetStrategy(car);
+                var context = new PricingContext(strategy);
+
+                response.Add(new
+                {
+                    car.Id,
+                    car.Make,
+                    car.Model,
+                    car.Year,
+                    car.Weight,
+                    car.Unit,
+                    car.FuelType,
+                    price = context.CalculatePrice(car),
+                    strategy = context.GetStrategyName()
+                });
+            }
 
             return Ok(response);
         }
