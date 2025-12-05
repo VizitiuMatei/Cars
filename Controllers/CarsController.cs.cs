@@ -73,10 +73,10 @@ namespace CarsApi.Controllers
             try
             {
                 var cars = await _externalAdapter.GetCarsAsync();
-                
+
                 var carsDto = cars.Select(car => new ExternalCarDto
                 {
-                    Manufacturer = car.Make,
+                    Manufacturer = car.Make,      
                     ModelName = car.Model,
                     ProductionYear = car.Year,
                     EngineType = car.FuelType
@@ -89,6 +89,7 @@ namespace CarsApi.Controllers
                 return StatusCode(500, $"Failed to fetch external cars: {ex.Message}");
             }
         }
+        
     }
 }
 

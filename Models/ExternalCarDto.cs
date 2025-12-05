@@ -8,6 +8,7 @@
         public string EngineType { get; set; } 
         
         public ExternalCarDto() {} 
+        
         public ExternalCarDto(string manufacturer, string modelName, int productionYear, string engineType)
         {
             Manufacturer = manufacturer;
