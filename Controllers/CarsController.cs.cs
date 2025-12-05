@@ -76,10 +76,10 @@ namespace CarsApi.Controllers
                 
                 var carsDto = cars.Select(car => new ExternalCarDto
                 {
-                    Manufacturer = car.Manufacturer,
-                    ModelName = car.ModelName,
-                    ProductionYear = car.ProductionYear,
-                    EngineType = car.EngineType
+                    Manufacturer = car.Make,
+                    ModelName = car.Model,
+                    ProductionYear = car.Year,
+                    EngineType = car.FuelType
                 }).ToList();
 
                 return Ok(carsDto);
@@ -89,6 +89,6 @@ namespace CarsApi.Controllers
                 return StatusCode(500, $"Failed to fetch external cars: {ex.Message}");
             }
         }
-        }
     }
 }
+
