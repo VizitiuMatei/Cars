@@ -29,11 +29,11 @@ builder.Services.AddHttpClient<IExternalCarApiAdapter, ExternalCarApiAdapter>();
 builder.Services.AddScoped<ICarRepository, CarRepository>();
 builder.Services.AddScoped<ICarService, CarService>();
  
-builder.Services.AddHttpClient<IExternalCarApiAdapter, ExternalCarApiAdapter>(client =>
+/*builder.Services.AddHttpClient<IExternalCarApiAdapter, ExternalCarApiAdapter>(client =>
 {
-    client.BaseAddress = new Uri("https://api.carsdata.com/cars"); 
+    client.BaseAddress = new Uri("https://api.carsdata.com"); 
     client.Timeout = TimeSpan.FromSeconds(10);
-});
+});*/
 
 var app = builder.Build();
  

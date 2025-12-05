@@ -26,14 +26,17 @@
         {
             try
             {
-                var resp = await _httpClient.GetFromJsonAsync<List<ExternalCarDto>>("/cars");
+                var resp = await _httpClient.GetFromJsonAsync<List<ExternalCarDto>>("http://localhost:5016/api/Cars");
                 if (resp == null) return Array.Empty<Car>();
 
 
                 var list = new List<Car>();
+                
                 foreach (var e in resp)
                 {
+                    Console.WriteLine(e);
                     var car = new Car
+                        
                     {
                         Make = e.Manufacturer,
                         Model = e.ModelName,
