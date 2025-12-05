@@ -3,9 +3,16 @@ using CarsApi.Data;
 using CarsApi.Repositories;
 using CarsApi.Services;
 using Microsoft.EntityFrameworkCore;
+using Cars.Observers;
+
+
+var carEventPublisher = new CarEventPublisher();
+carEventPublisher.Subscribe(new ConsoleLoggingCarCreatedListener());
  
 var builder = WebApplication.CreateBuilder(args);
  
+
+builder.Services.AddSingleton(carEventPublisher);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

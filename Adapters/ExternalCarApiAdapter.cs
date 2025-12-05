@@ -7,45 +7,51 @@
     using Models;
     using Microsoft.Extensions.Logging;
     using System;
-
-
+    using System.Text.Json;
+ 
+ 
     public class ExternalCarApiAdapter : IExternalCarApiAdapter
     {
         private readonly HttpClient _httpClient;
         private readonly ILogger<ExternalCarApiAdapter> _logger;
-
-
+ 
+ 
         public ExternalCarApiAdapter(HttpClient httpClient, ILogger<ExternalCarApiAdapter> logger)
         {
             _httpClient = httpClient;
             _logger = logger;
         }
-
-
+ 
+ 
         public async Task<IEnumerable<Car>> GetCarsAsync()
         {
             try
             {
-                var resp = await _httpClient.GetFromJsonAsync<List<ExternalCarDto>>("http://localhost:5016/api/Cars");
-                if (resp == null) return Array.Empty<Car>();
-
-
-                var list = new List<Car>();
-                
-                foreach (var e in resp)
+                var requestUrl = "http://localhost:5016/api/Cars";
+                var response = await _httpClient.GetAsync(requestUrl);
+ 
+                var body = response.Content == null ? string.Empty : await response.Content.ReadAsStringAsync();
+                _logger.LogDebug("External API {Url} returned Status={StatusCode} Body={Body}", requestUrl, response.StatusCode, body);
+ 
+                if (!response.IsSuccessStatusCode)
                 {
-                    Console.WriteLine(e);
-                    var car = new Car
-                        
-                    {
-                        Make = e.Manufacturer,
-                        Model = e.ModelName,
-                        Year = e.ProductionYear,
-                        FuelType = MapEngineType(e.EngineType)
-                    };
-                    list.Add(car);
+                    _logger.LogWarning("External API returned non-success status {StatusCode}", response.StatusCode);
+                    return Array.Empty<Car>();
                 }
-                return list;
+ 
+                var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                var resp = JsonSerializer.Deserialize<List<Car>>(body, options);
+                if (resp == null) return Array.Empty<Car>();
+ 
+                
+                foreach (var car in resp)
+                {
+                    car.FuelType = MapEngineType(car.FuelType);
+                }
+ 
+                _logger.LogDebug("Deserialized {Count} cars from external API", resp.Count);
+ 
+                return resp;
             }
             catch (Exception ex)
             {
@@ -53,8 +59,8 @@
                 throw; 
             }
         }
-
-
+ 
+ 
         private string MapEngineType(string e)
         {
             return e?.Trim().ToLowerInvariant() switch

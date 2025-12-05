@@ -1,4 +1,5 @@
-﻿using CarsApi.Adapters;
+﻿using Cars.Observers;
+using CarsApi.Adapters;
 using CarsApi.Models;
 using CarsApi.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -89,7 +90,23 @@ namespace CarsApi.Controllers
                 return StatusCode(500, $"Failed to fetch external cars: {ex.Message}");
             }
         }
+        [HttpPost]
+        public IActionResult AddCar(CarDTO dto)
+        {
+            var car = new Car
+            {
+            };
+
+            _context.Cars.Add(car);
+            _context.SaveChanges();
+
+            
+            _publisher.NotifyCarCreated();
+
+            return Ok(car);
+        }
         
     }
 }
+
 
