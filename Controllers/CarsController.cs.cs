@@ -1,4 +1,5 @@
-﻿using CarsApi.Models;
+﻿using CarsApi.Adapters;
+using CarsApi.Models;
 using CarsApi.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,10 +10,12 @@ namespace CarsApi.Controllers
     public class CarsController : ControllerBase
     {
         private readonly ICarService _service;
+        private readonly IExternalCarApiAdapter _externalAdapter;
 
-        public CarsController(ICarService service)
+        public CarsController(ICarService service, IExternalCarApiAdapter externalAdapter)
         {
             _service = service;
+            _externalAdapter = externalAdapter;
         }
 
         
@@ -63,6 +66,19 @@ namespace CarsApi.Controllers
             var deleted = await _service.DeleteAsync(id);
             if (!deleted) return NotFound();
             return NoContent();
+        }
+        [HttpGet("external")]
+        public async Task<IActionResult> GetExternalCars()
+        {
+            try
+            {
+                var cars = await _externalAdapter.GetCarsAsync();
+                return Ok(cars);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Failed to fetch external cars: {ex.Message}");
+            }
         }
     }
 }

@@ -23,32 +23,9 @@ namespace CarsApi.Controllers
             var car = await _context.Cars.FindAsync(id);
             if (car == null) return NotFound();
 
-            var vintageCars = new List<Car>();
-            var electricCars = new List<Car>();
-            var luxuryCars = new List<Car>();
-            var standardCars = new List<Car>();
+            var strategy = PricingStrategyFactory.GetStrategy(car);
+            var pricingContext = new PricingContext(strategy);
             
-            if (car.Year < 2000)
-            {
-                vintageCars.Add(car);
-            }
-            else if (car.FuelType?.ToLower() == "electric")
-            {
-                electricCars.Add(car);
-            }
-            else if (car.Make?.ToLower() == "audi" ||
-                     car.Make?.ToLower() == "bmw" ||
-                     car.Make?.ToLower() == "mercedes")
-            {
-                luxuryCars.Add(car);
-            }
-            else
-            {
-                standardCars.Add(car);
-            }
-
-            var pricingContext = new PricingContext(new VintagePricingStrategy());
-
             var response = new
             {
                 car.Id,

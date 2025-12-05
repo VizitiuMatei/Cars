@@ -30,19 +30,15 @@
         }
 
 
-        public Car CreateCar(string carType)
+        public Car CreateCar(string carType, string make, string model, int year, decimal basePrice = 0)
         {
-
             var t = carType?.Trim().ToLowerInvariant();
             return t switch
             {
-                "electric" => new Car { FuelType = "Electric", /* alte proprietăți default */ },
-                "ev" => new Car { FuelType = "Electric" },
-                "hybrid" => new Car { FuelType = "Hybrid" },
-                "hev" => new Car { FuelType = "Hybrid" },
-                "diesel" => new Car { FuelType = "Diesel" },
-                "petrol" => new Car { FuelType = "Petrol" },
-                "ice" => new Car { FuelType = "Petrol" },
+                "electric" or "ev" => new ElectricCar { Make = make, Model = model, Year = year, BasePrice = basePrice, FuelType = "Electric" },
+                "hybrid" or "hev" => new HybridCar { Make = make, Model = model, Year = year, BasePrice = basePrice, FuelType = "Hybrid" },
+                "diesel" => new DieselCar { Make = make, Model = model, Year = year, BasePrice = basePrice, FuelType = "Diesel" },
+                "petrol" or "ice" => new PetrolCar { Make = make, Model = model, Year = year, BasePrice = basePrice, FuelType = "Petrol" },
                 _ => throw new ArgumentException($"Unknown car type: {carType}")
             };
         }
