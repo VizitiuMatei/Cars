@@ -10,7 +10,6 @@ var carEventPublisher = new CarEventPublisher();
 carEventPublisher.Subscribe(new ConsoleLoggingCarCreatedListener());
  
 var builder = WebApplication.CreateBuilder(args);
- 
 
 builder.Services.AddSingleton(carEventPublisher);
 builder.Services.AddControllers();
