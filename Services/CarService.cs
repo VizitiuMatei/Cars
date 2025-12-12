@@ -1,4 +1,6 @@
-﻿using CarsApi.Models;
+﻿using Cars.Observers;
+using CarsApi.Data;
+using CarsApi.Models;
 using CarsApi.Repositories;
 
 namespace CarsApi.Services
@@ -60,4 +62,6 @@ namespace CarsApi.Services
             return true;
         }
     }
+    
 }
+

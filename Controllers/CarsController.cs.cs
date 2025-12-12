@@ -1,4 +1,6 @@
-﻿using CarsApi.Models;
+﻿using Cars.Observers;
+using CarsApi.Adapters;
+using CarsApi.Models;
 using CarsApi.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,10 +11,12 @@ namespace CarsApi.Controllers
     public class CarsController : ControllerBase
     {
         private readonly ICarService _service;
+        private readonly IExternalCarApiAdapter _externalAdapter;
 
-        public CarsController(ICarService service)
+        public CarsController(ICarService service, IExternalCarApiAdapter externalAdapter)
         {
             _service = service;
+            _externalAdapter = externalAdapter;
         }
 
         
@@ -64,5 +68,45 @@ namespace CarsApi.Controllers
             if (!deleted) return NotFound();
             return NoContent();
         }
+        [HttpGet("external")]
+        public async Task<IActionResult> GetExternalCars()
+        {
+            try
+            {
+                var cars = await _externalAdapter.GetCarsAsync();
+
+                var carsDto = cars.Select(car => new ExternalCarDto
+                {
+                    Manufacturer = car.Make,      
+                    ModelName = car.Model,
+                    ProductionYear = car.Year,
+                    EngineType = car.FuelType
+                }).ToList();
+
+                return Ok(carsDto);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Failed to fetch external cars: {ex.Message}");
+            }
+        }
+        [HttpPost]
+        public IActionResult AddCar(CarDTO dto)
+        {
+            var car = new Car
+            {
+            };
+
+            _context.Cars.Add(car);
+            _context.SaveChanges();
+
+            
+            _publisher.NotifyCarCreated();
+
+            return Ok(car);
+        }
+        
     }
 }
+
+
